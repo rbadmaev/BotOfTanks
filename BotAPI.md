@@ -12,10 +12,11 @@
         "position": [int_x, int_y],
         "radius": int_radius,
         "movement": [double_x, double_y],
+        "move_forward": bool,
         "max_acceleration": double_acceleration,
         "canon_angle": double_angle,
         "canon_rotate_speed": double_angle_per_time_quant,
-        "health": int_health
+        "health": int_health,
     }
     ```
 - Каждый снаряд описывается следующим сообщением
@@ -29,6 +30,7 @@
 Полный формат входящего сообщения тогда будет таким
 ```json
 {
+    "map_size": [int_x_size, int_y_size],
     "me": {
         "position": [int_x, int_y],
         "radius": int_radius,
