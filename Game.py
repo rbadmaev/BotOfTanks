@@ -69,9 +69,9 @@ class Game:
             now = Time.getTime()
             screen.fill((255, 255, 255))
             for tank in self._tanks:
-                tank.draw(screen, now)
                 if not tank.isAlive():
                     tank.smoothStop(now)
+                    tank.draw(screen, now)
                     continue
 
                 for otherTank in self._tanks:
@@ -100,8 +100,11 @@ class Game:
                         else:
                             tank.bullet().draw(screen, now)
 
+            for tank in self._tanks:
+                tank.draw(screen, now)
+
             pygame.display.flip()
-            # Time.sleep(0.1)
+            Time.sleep(0.07)
 
         Time.sleep(3)
         if (len(self._aliveTanks) > 0):
