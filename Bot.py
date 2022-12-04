@@ -19,18 +19,13 @@ class Bot:
         print("start", name)
         while tank.isAlive() and not self._game.isFinished():
             now = Time.getTime()
-            # try:
             s = self._game.getJsonStruct(tank, now)
             stateMsg = json.dumps(self._game.getJsonStruct(tank, now))
-            # print(name, stateMsg)
             process.stdin.write(stateMsg + "\n")
             answer = process.stdout.readline()
-            # print(name, answer)
             control = Control.parse(answer)
             if tank.isAlive():
                 tank.setControl(control)
-            # except:
-            #     pass
 
         print("terminame ", name)
         process.terminate()
