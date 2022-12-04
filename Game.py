@@ -124,4 +124,4 @@ class Game:
             (position.y + moveable.radius() >= self._size.y)
 
     def notifyDeadTank(self, tank):
-        self._aliveTanks.remove(tank)
+        self._aliveTanks.discard(tank)
