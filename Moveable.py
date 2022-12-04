@@ -21,7 +21,6 @@ class Moveable:
     def changeAcceleration(self,
                            acceleration: Vector,
                            now: Time.Time) -> None:
-        assert(now > self._time)
         duration = now - self._time
         self._position = self.calculatePosition(now)
         self._speed =  self.speed(now)
