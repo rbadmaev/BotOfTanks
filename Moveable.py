@@ -69,4 +69,5 @@ class Moveable:
         return {"position": self.calculatePosition(now).getJsonStruct(),
                 "radius": self.radius(),
                 "movement": [speed.x, speed.y],
+                "max_speed": self._maxSpeed,
                 "max_acceleration": self._maxAcceleration}
