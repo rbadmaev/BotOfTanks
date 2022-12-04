@@ -104,7 +104,7 @@ class Game:
                 tank.draw(screen, now)
 
             pygame.display.flip()
-            Time.sleep(0.07)
+            Time.sleep(0.03)
 
         Time.sleep(3)
         if (len(self._aliveTanks) > 0):
