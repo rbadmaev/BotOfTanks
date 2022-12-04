@@ -13,7 +13,7 @@ class Bot:
                                         args=([os.path.join(path, "main.py")], tank))
 
     def _botFunc(self, command, tank):
-        process = Popen(command, stdin=PIPE, stdout=PIPE, stderr=STDOUT, text=True, bufsize=0, universal_newlines=True)
+        process = Popen(command, stdin=PIPE, stdout=PIPE, stderr=STDOUT, text=True, bufsize=0, universal_newlines=True, shell=True)
         name = process.stdout.readline()
         tank.setName(name)
         print("start", name)
