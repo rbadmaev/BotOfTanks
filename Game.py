@@ -15,6 +15,7 @@ class Game:
         self._tanks = []
         self._bots = []
         self._aliveTanks = set()
+        self._paused = False
 
     def isFinished(self):
         return len(self._aliveTanks) <= 1
@@ -67,6 +68,8 @@ class Game:
         while len(self._aliveTanks) > 1:
             prevTime = now
             now = Time.getTime()
+            self._processUserActions(now, prevTime)
+
             screen.fill((255, 255, 255))
             for tank in self._tanks:
                 if not tank.isAlive():
@@ -115,6 +118,15 @@ class Game:
             print("Draw!!")
 
         pygame.quit()
+
+    def _processUserActions(self, now, prevTime):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self._paused = not self._paused
+                Time.pause(self._paused)
+
+    def paused(self) -> bool:
+        return self._paused
 
     def outOfField(self, moveable, now: Time.Time):
         position = moveable.calculatePosition(now)

@@ -18,6 +18,10 @@ class Bot:
         tank.setName(name)
         print("start", name)
         while tank.isAlive() and not self._game.isFinished():
+            if self._game.paused():
+                Time.sleep(0.1)
+                continue
+
             now = Time.getTime()
             s = self._game.getJsonStruct(tank, now)
             stateMsg = json.dumps(self._game.getJsonStruct(tank, now))
