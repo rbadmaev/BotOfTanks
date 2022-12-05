@@ -131,6 +131,8 @@ class Game:
                     self._showDebug = not self._showDebug
                 elif event.key == pygame.K_s:
                     self._showSkins = not self._showSkins
+                elif event.key == pygame.K_ESCAPE:
+                    self._aliveTanks.clear()
 
     def paused(self) -> bool:
         return self._paused
