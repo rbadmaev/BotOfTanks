@@ -77,8 +77,8 @@ class Tank(Moveable):
 
         if self._game.showSkins():
             image = pygame.transform.rotate(self._sprite  if self.isAlive() else self._deadSprite,
-                                            math.degrees(canonAngle - math.pi / 2))
-            screen.blit(image, (position.x - self._radius, position.y - self._radius))
+                                             - 90 - math.degrees(canonAngle) )
+            screen.blit(image, (position.x - image.get_width() / 2, position.y - image.get_height() / 2))
 
         if self._game.showDebug():
             canon = self._canon.directionOrt(now) * (self.radius() * 1.2)
