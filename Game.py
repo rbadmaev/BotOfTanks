@@ -16,6 +16,8 @@ class Game:
         self._bots = []
         self._aliveTanks = set()
         self._paused = False
+        self._showSkins = True
+        self._showDebug = True
 
     def isFinished(self):
         return len(self._aliveTanks) <= 1
@@ -121,12 +123,23 @@ class Game:
 
     def _processUserActions(self, now, prevTime):
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                self._paused = not self._paused
-                Time.pause(self._paused)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self._paused = not self._paused
+                    Time.pause(self._paused)
+                elif event.key == pygame.K_d:
+                    self._showDebug = not self._showDebug
+                elif event.key == pygame.K_s:
+                    self._showSkins = not self._showSkins
 
     def paused(self) -> bool:
         return self._paused
+
+    def showDebug(self) -> bool:
+        return self._showDebug
+
+    def showSkins(self) -> bool:
+        return self._showSkins
 
     def outOfField(self, moveable, now: Time.Time):
         position = moveable.calculatePosition(now)
