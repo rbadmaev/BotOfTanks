@@ -72,7 +72,6 @@ class Tank(Moveable):
         position = self.calculatePosition(now)
         speed = self.speed(now)
         canonAngle = self._canon.caclculateDirection(now)
-        canon = self._canon.directionOrt(now) * (self.radius() * 1.2)
         if self._game.showDebug():
             pygame.draw.circle(screen, (0, 0, 0), [position.x, position.y], self.radius())
 
@@ -82,8 +81,12 @@ class Tank(Moveable):
             screen.blit(image, (position.x - self._radius, position.y - self._radius))
 
         if self._game.showDebug():
+            canon = self._canon.directionOrt(now) * (self.radius() * 1.2)
+            canonTarget = self._canon.targetOrt() * (self.radius() * 1.5)
+            targetStart = self._canon.targetOrt() * self.radius()
             pygame.draw.line(screen, (0, 255, 255), [position.x, position.y], [position.x + speed.x, position.y + speed.y])
             pygame.draw.line(screen, (255, 0, 0), [position.x, position.y], [position.x + canon.x, position.y + canon.y])
+            pygame.draw.line(screen, (255, 0, 0), [position.x + targetStart.x, position.y + targetStart.y], [position.x + canonTarget.x, position.y + canonTarget.y])
 
     def explodeBullet(self):
         self._bullet = None

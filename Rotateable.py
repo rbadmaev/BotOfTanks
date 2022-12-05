@@ -53,5 +53,10 @@ class Rotateable:
         return Vector(x = math.cos(angle),
                       y = math.sin(angle))
 
+    def targetOrt(self) -> Vector:
+        angle = self._targetAngle
+        return Vector(x = math.cos(angle),
+                      y = math.sin(angle))
+
     def rotateSpeed(self) -> Angle.Radians:
         return self._rotateSpeed
