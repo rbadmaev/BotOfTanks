@@ -2,6 +2,10 @@
 
 import json
 import math
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 def send_request(acceleration, canon_rotate_to, shoot):
     print(json.dumps({
@@ -16,23 +20,29 @@ def getDistance(tank1, tank2):
         math.pow(tank1["position"][0] - tank2["position"][0], 2) +
         math.pow(tank1["position"][1] - tank2["position"][1], 2))
 
+def normalizeAngle(angle):
+    while (angle < 0):
+        angle += 2*math.pi
+
+    while (angle >= 2*math.pi):
+        angle -= 2*math.pi
+
+    return angle
+
 def getAngle(x, y):
-    if x > 0 and y > 0:
-        return math.atan(y / x)
-
-    if x < 0 and y < 0:
-        return 3/2*math.pi - math.atan(y / x)
-
-    if x < 0:
-        return math.pi - math.atan(abs(y / x))
-
     if x > 0:
-        return 2*math.pi - math.atan(abs(y / x))
+        return normalizeAngle(math.atan(y / x))
+    elif x < 0:
+        if y > 0:
+            return math.atan(y / x) + math.pi
+        else:
+            return math.atan(y / x) + math.pi
 
-    if y > 0:
-        return math.pi / 2
+    assert(x == 0)
+    if y == 0:
+        return 0
 
-    return 3/2*math.pi
+    return math.pi / 2 + (math.pi if y < 0 else 0)
 
 print("coward bot")
 
@@ -61,9 +71,11 @@ while True:
     yDistance = closestEnemy["position"][1] - me["position"][1]
     canonAngle = me["canon_angle"]
     angleToEnemy = getAngle(xDistance, yDistance)
-    send_request(acceleration = [yDistance, xDistance],
+    eprint("coward, angleToEnemy:", math.degrees(angleToEnemy), "canonAngle:", math.degrees( canonAngle))
+
+    send_request(acceleration = [yDistance, -xDistance],
                  canon_rotate_to = angleToEnemy,
-                 shoot = abs(canonAngle - angleToEnemy) < 0.1)
+                 shoot = abs(canonAngle - angleToEnemy) < 0.05)
 
 
 
