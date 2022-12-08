@@ -4,7 +4,7 @@ from Control import Control
 import os
 import threading
 import json
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
 import sys
 
 class Bot:
@@ -32,8 +32,8 @@ class Bot:
             if tank.isAlive():
                 tank.setControl(control)
 
-        print("terminame ", name)
         process.terminate()
+        print("terminame ", name)
 
     def start(self):
         self._thread.start()
