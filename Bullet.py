@@ -16,11 +16,17 @@ class Bullet(Moveable):
                          speed = direction.resize(maxSpeed),
                          maxAcceleration = 0,
                          radius = radius)
+        self._exploding = False
 
     def draw(self, screen, now: Time.Time):
         position = self.calculatePosition(now)
-        pygame.draw.circle(screen, (255, 0, 0), [position.x, position.y], self.radius())
+        if self.isExploided():
+            pygame.draw.circle(screen, (255, 0, 0), [position.x, position.y], 2*self.radius())
+        else:
+            pygame.draw.circle(screen, (255, 0, 0), [position.x, position.y], self.radius())
 
-    def drawExplosion(self, screen, now: Time.Time):
-        position = self.calculatePosition(now)
-        pygame.draw.circle(screen, (255, 0, 0), [position.x, position.y], 2*self.radius())
+    def explode(self):
+        self._exploding = True
+
+    def isExploided(self):
+        return self._exploding

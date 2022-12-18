@@ -89,6 +89,9 @@ class Tank(Moveable):
             pygame.draw.line(screen, (255, 0, 0), [position.x + targetStart.x, position.y + targetStart.y], [position.x + canonTarget.x, position.y + canonTarget.y])
 
     def explodeBullet(self):
+        self._bullet.explode()
+
+    def removeBullet(self):
         self._bullet = None
 
     def bullet(self):

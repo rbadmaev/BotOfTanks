@@ -60,6 +60,13 @@ class Game:
         tank = self._createTank(path);
         self._bots.append(Bot(self, path, tank))
 
+    def draw(self, screen, now):
+        screen.fill((255, 255, 255))
+        for tank in self._tanks:
+            tank.draw(screen, now)
+            if tank.bullet():
+                tank.bullet().draw(screen, now)
+
     def start(self):
         pygame.init()
         screen = pygame.display.set_mode([self._size.x, self._size.y])
@@ -91,23 +98,18 @@ class Game:
                         tank.hitAndStop(prevTime)
 
                     if tank.bullet():
-                        if tank.bullet().intersect(otherTank, now):
+                        if tank.bullet().isExploided():
+                            tank.removeBullet()
+                        elif tank.bullet().intersect(otherTank, now):
                             otherTank.hit(now)
-                            tank.bullet().drawExplosion(screen, now)
                             tank.explodeBullet()
                         elif otherTank.bullet() and tank.bullet().intersect(otherTank.bullet(), now):
-                            tank.bullet().drawExplosion(screen, now)
                             tank.explodeBullet()
                             otherTank.explodeBullet()
                         elif self.outOfField(tank.bullet(), now):
-                            tank.bullet().drawExplosion(screen, now)
                             tank.explodeBullet()
-                        else:
-                            tank.bullet().draw(screen, now)
 
-            for tank in self._tanks:
-                tank.draw(screen, now)
-
+            self.draw(screen, now)
             pygame.display.flip()
             Time.sleep(0.03)
 
