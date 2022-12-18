@@ -15,10 +15,13 @@ def send_request(acceleration, canon_rotate_to, shoot):
     }),
     flush=True)
 
-def getDistance(tank1, tank2):
+def getDistance(position1, position2):
     return math.sqrt(
-        math.pow(tank1["position"][0] - tank2["position"][0], 2) +
-        math.pow(tank1["position"][1] - tank2["position"][1], 2))
+        math.pow(position1[0] - position2[0], 2) +
+        math.pow(position1[1] - position2[1], 2))
+
+def getTanksDistance(tank1, tank2):
+    return getDistance(tank1["position"], tank2["position"])
 
 def normalizeAngle(angle):
     while (angle < 0):
@@ -44,6 +47,39 @@ def getAngle(x, y):
 
     return math.pi / 2 + (math.pi if y < 0 else 0)
 
+def rotateVector(vector, angle):
+    return [
+        vector[0]*math.cos(angle) - vector[1]*math.sin(angle),
+        vector[0]*math.sin(angle) + vector[1]*math.cos(angle)
+    ]
+
+def getVector(angle, lenght):
+    return [math.cos(angle) * lenght, math.sin(angle) * lenght]
+
+def getVecotorSize(vector):
+    return math.sqrt(math.pow(vector[0], 2) + math.pow(vector[1], 2))
+
+def shortenVector(vector, size):
+    currentSize = getVecotorSize(vector)
+    return[vector[0] * size / currentSize, vector[1] * size / currentSize]
+
+def avoidBorders(size, position, speed, acceleration, maxAcceleration, radius):
+    result = acceleration
+    realAcceleration = maxAcceleration / math.sqrt(2) # use max half of acceleration to avoid borders
+    def getAcceleration(dim):
+        speedInDim = abs(speed[dim])
+        timeToStop = speedInDim / realAcceleration
+        stopDistance = speedInDim * timeToStop + realAcceleration * math.pow(timeToStop, 2) / 2
+        distance = size[dim] - position[dim] if speed[dim] > 0 else position[dim]
+        eprint("timeToStop", timeToStop, "stopDistance", stopDistance, "distance", distance)
+        if 1.05 * (distance - radius) <= stopDistance:
+            return -math.copysign(realAcceleration, speed[dim])
+
+        return acceleration[dim]
+
+
+    return [getAcceleration(0), getAcceleration(1)]
+
 print("coward bot")
 
 while True:
@@ -53,27 +89,31 @@ while True:
     enemies = dictRequest['enemies']
     bullets = dictRequest['bullets']
 
-    closestEnemy = None
-    closestEnemyDistance = 100000
+    mainEnemy = None
+    mainEnemyDistance = 100000
     for enemy in enemies:
-        distance = getDistance(me, enemy)
-        if distance < closestEnemyDistance:
-            closestEnemy = enemy
-            closestEnemyDistance = distance
+        distance = getTanksDistance(me, enemy)
+        if distance < mainEnemyDistance:
+            mainEnemy = enemy
+            mainEnemyDistance = distance
 
-    if closestEnemy == None:
+    if mainEnemy == None:
         send_request(acceleration = [0,0],
                      canon_rotate_to = 0,
                      shoot = False)
         continue
 
-    xDistance = closestEnemy["position"][0] - me["position"][0]
-    yDistance = closestEnemy["position"][1] - me["position"][1]
+    xDistance = mainEnemy["position"][0] - me["position"][0]
+    yDistance = mainEnemy["position"][1] - me["position"][1]
     canonAngle = me["canon_angle"]
     angleToEnemy = getAngle(xDistance, yDistance)
-    eprint("coward, angleToEnemy:", math.degrees(angleToEnemy), "canonAngle:", math.degrees( canonAngle))
 
-    send_request(acceleration = [yDistance, -xDistance],
+    send_request(acceleration = avoidBorders(size = mapSize,
+                                             position = me["position"],
+                                             speed = me["movement"],
+                                             acceleration = shortenVector([yDistance, -xDistance], me["max_acceleration"]),
+                                             maxAcceleration = me["max_acceleration"],
+                                             radius = me["radius"]),
                  canon_rotate_to = angleToEnemy,
                  shoot = abs(canonAngle - angleToEnemy) < 0.05)
 
