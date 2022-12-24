@@ -11,7 +11,7 @@ def tick():
     global pauseStart
 
     assert(pauseStart > 0)
-    pauseStart = pauseStart + 0.3
+    pauseStart = pauseStart + 0.1
     print (getTime())
 
 def pause(enablePause: bool = True):
