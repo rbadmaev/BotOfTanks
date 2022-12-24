@@ -86,7 +86,7 @@ def avoidBorders(size, position, speed, acceleration, maxAcceleration, radius):
 
     return [getAcceleration(0), getAcceleration(1)]
 
-print("coward bot")
+print("Rabbit")
 
 while True:
     dictRequest = json.loads(input())
@@ -98,6 +98,9 @@ while True:
     mainEnemy = None
     mainEnemyDistance = 100000
     for enemy in enemies:
+        if enemy["health"] <= 0:
+            continue
+
         distance = getTanksDistance(me, enemy)
         if distance < mainEnemyDistance:
             mainEnemy = enemy

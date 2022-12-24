@@ -45,7 +45,7 @@ def getAngle(x, y):
 
     return math.pi / 2 + (math.pi if y < 0 else 0)
 
-print("berserk bot")
+print("berserk")
 
 while True:
     dictRequest = json.loads(input())
@@ -57,6 +57,9 @@ while True:
     closestEnemy = None
     closestEnemyDistance = 100000
     for enemy in enemies:
+        if enemy["health"] <= 0:
+            continue
+
         distance = getDistance(me, enemy)
         if distance < closestEnemyDistance:
             closestEnemy = enemy
@@ -72,7 +75,7 @@ while True:
     yDistance = closestEnemy["position"][1] - me["position"][1]
     canonAngle = me["canon_angle"]
     angleToEnemy = getAngle(xDistance, yDistance)
-    eprint("bersert, angleToEnemy:", math.degrees(angleToEnemy), "canonAngle:", math.degrees( canonAngle))
+    # eprint("bersert, angleToEnemy:", math.degrees(angleToEnemy), "canonAngle:", math.degrees( canonAngle))
     send_request(acceleration = [xDistance, yDistance],
                  canon_rotate_to = angleToEnemy,
                  shoot = abs(canonAngle - angleToEnemy) < 0.1)
