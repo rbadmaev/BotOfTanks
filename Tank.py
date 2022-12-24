@@ -74,6 +74,9 @@ class Tank(Moveable):
         canonAngle = self._canon.caclculateDirection(now)
         if self._game.showDebug():
             pygame.draw.circle(screen, (0, 0, 0), [position.x, position.y], self.radius())
+            font = pygame.font.Font(pygame.font.get_default_font(), 20)
+            healthText = font.render(str(self._health) , False, (255, 100, 125))
+            screen.blit(healthText, (position.x  - healthText.get_width() / 2, position.y - healthText.get_height() / 2))
 
         if self._game.showSkins():
             image = pygame.transform.rotate(self._sprite  if self.isAlive() else self._deadSprite,
