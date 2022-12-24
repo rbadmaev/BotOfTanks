@@ -70,10 +70,16 @@ def avoidBorders(size, position, speed, acceleration, maxAcceleration, radius):
         speedInDim = abs(speed[dim])
         timeToStop = speedInDim / realAcceleration
         stopDistance = speedInDim * timeToStop + realAcceleration * math.pow(timeToStop, 2) / 2
-        distance = size[dim] - position[dim] if speed[dim] > 0 else position[dim]
-        eprint("timeToStop", timeToStop, "stopDistance", stopDistance, "distance", distance)
-        if 1.05 * (distance - radius) <= stopDistance:
+        distance = (size[dim] - position[dim] if speed[dim] > 0 else position[dim]) - radius
+        if 1.05 * distance <= stopDistance:
+
             return -math.copysign(realAcceleration, speed[dim])
+
+        futureTime = 0.5
+        distance = (size[dim] - position[dim] if acceleration[dim] > 0 else position[dim]) - radius
+        moveDistance = abs(acceleration[dim]) * math.pow(futureTime, 2) / 2
+        if moveDistance >= distance:
+            return 0
 
         return acceleration[dim]
 
