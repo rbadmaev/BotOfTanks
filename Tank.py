@@ -39,6 +39,9 @@ class Tank(Moveable):
 
     def setName(self, name):
         assert(len(name) > 0)
+        if name[-1] == '\n':
+            name = name[:-1]
+
         self._name = name
 
     def getName(self):
@@ -79,6 +82,10 @@ class Tank(Moveable):
             font = pygame.font.Font(pygame.font.get_default_font(), 20)
             healthText = font.render(str(self._health) , False, (255, 100, 125))
             screen.blit(healthText, (position.x  - healthText.get_width() / 2, position.y - healthText.get_height() / 2))
+
+            font = pygame.font.Font(pygame.font.get_default_font(), 12)
+            nameText = font.render(self.getName(), False, (200, 200, 200))
+            screen.blit(nameText, (position.x - nameText.get_width() / 2, position.y - nameText.get_height() - self._radius*1.1))
 
         if self._game.showSkins():
             image = pygame.transform.rotate(self._sprite  if self.isAlive() else self._deadSprite,
