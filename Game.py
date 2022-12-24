@@ -67,8 +67,16 @@ class Game:
             if tank.bullet():
                 tank.bullet().draw(screen, now)
 
+    def showWinner(self, screen, now, winner):
+        self.draw(screen, now)
+        font = pygame.font.Font(pygame.font.get_default_font(), 30)
+        text = font.render(winner , False, (0, 0, 0))
+        screen.blit(text, ((self._size.x  - text.get_width()) / 2, self._size.y / 2))
+        pygame.display.flip()
+
     def start(self):
         pygame.init()
+        pygame.font.init()
         screen = pygame.display.set_mode([self._size.x, self._size.y])
         for bot in self._bots:
             bot.start()
@@ -113,15 +121,25 @@ class Game:
             pygame.display.flip()
             Time.sleep(0.03)
 
-        Time.sleep(3)
         if (len(self._aliveTanks) > 0):
             for winner in self._aliveTanks:
                 break
-            print("Winner is", winner.getName())
+            self.showWinner(screen, now, "Winner is " + winner.getName())
+
         else:
-            print("Draw!!")
+            self.showWinner(screen, now, "Draw!!!")
+
+        self._waitForAnyKey()
 
         pygame.quit()
+
+    def _waitForAnyKey(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    return None
+
+            Time.sleep(0.03)
 
     def _processUserActions(self, now, prevTime):
         for event in pygame.event.get():
