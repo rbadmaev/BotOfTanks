@@ -66,7 +66,8 @@ class Tank(Moveable):
 
     def hit(self, now: Time.Time):
         self._health -= 1
-        self._game.notifyDeadTank(self)
+        if self._health <= 0:
+            self._game.notifyDeadTank(self)
 
     def draw(self, screen, now: Time.Time):
         position = self.calculatePosition(now)
