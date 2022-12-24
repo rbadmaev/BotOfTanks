@@ -91,18 +91,16 @@ class Game:
             for tank in self._tanks:
                 if not tank.isAlive():
                     tank.smoothStop(now)
-                    tank.draw(screen, now)
-                    continue
 
                 for otherTank in self._tanks:
                     if tank == otherTank:
                         continue
 
-                    if tank.intersect(otherTank, now):
+                    if tank.isAlive() and tank.intersect(otherTank, now):
                         tank.hitAndStop(prevTime)
                         otherTank.hitAndStop(prevTime)
 
-                    if self.outOfField(tank, now):
+                    if tank.isAlive() and self.outOfField(tank, now):
                         tank.hitAndStop(prevTime)
 
                     if tank.bullet():
