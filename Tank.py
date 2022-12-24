@@ -35,6 +35,7 @@ class Tank(Moveable):
                                               (radius*2, radius*2))
         self._deadSprite = pygame.transform.scale(pygame.image.load(os.path.join (path, "deadTank.png")),
                                               (radius*2, radius*2))
+        self._maxHealth = health
 
     def setName(self, name):
         assert(len(name) > 0)
@@ -83,6 +84,17 @@ class Tank(Moveable):
             image = pygame.transform.rotate(self._sprite  if self.isAlive() else self._deadSprite,
                                              - 90 - math.degrees(canonAngle) )
             screen.blit(image, (position.x - image.get_width() / 2, position.y - image.get_height() / 2))
+
+            def getHealthX(percent):
+                healthLen = self._radius * 2
+                healthXStart = position.x - self._radius
+                return max(healthXStart + healthLen * percent, healthXStart)
+
+            healthY = position.y + self._radius*1.1
+            healthPercent = self._health / self._maxHealth
+            healthX = getHealthX(healthPercent)
+            pygame.draw.line(screen, (10, 255, 50), [getHealthX(0), healthY], [healthX, healthY])
+            pygame.draw.line(screen, (255, 10, 50), [healthX, healthY], [getHealthX(1), healthY])
 
         if self._game.showDebug():
             canon = self._canon.directionOrt(now) * (self.radius() * 1.2)
