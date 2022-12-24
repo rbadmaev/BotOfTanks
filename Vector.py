@@ -89,7 +89,7 @@ class Vector:
     def shorten(self, lenght: float):
         result = copy(self)
         selfLen = self.lenght()
-        if (lenght < selfLen):
+        if lenght < selfLen:
             result *= lenght / selfLen
 
         return result
@@ -101,6 +101,10 @@ class Vector:
 
     def getJsonStruct(self):
         return [self.x, self.y]
+
+    def getRotated(self, angle):
+        return Vector(x=self.x*math.cos(angle) + self.y*math.sin(angle),
+                      y=self.x*math.sin(angle) + self.y*math.cos(angle))
 
     def __repr__(self):
         return "[x=" + str(self.x) + ", y=" + str(self.y) + "]"
