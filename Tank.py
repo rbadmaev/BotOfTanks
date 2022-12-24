@@ -61,10 +61,10 @@ class Tank(Moveable):
         return self._health > 0
 
     def hitAndStop(self, now: Time.Time):
-        self.hit(now)
+        self.hit()
         self.immediateStop(now)
 
-    def hit(self, now: Time.Time):
+    def hit(self):
         self._health -= 1
         if self._health <= 0:
             self._game.notifyDeadTank(self)

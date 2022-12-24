@@ -109,7 +109,7 @@ class Game:
                         if tank.bullet().isExploided():
                             tank.removeBullet()
                         elif tank.bullet().intersect(otherTank, now):
-                            otherTank.hit(now)
+                            otherTank.hit()
                             tank.explodeBullet()
                         elif otherTank.bullet() and tank.bullet().intersect(otherTank.bullet(), now):
                             tank.explodeBullet()
