@@ -119,7 +119,7 @@ class Game:
 
             self.draw(screen, now)
             pygame.display.flip()
-            Time.sleep(0.03)
+            Time.sleep(0.02)
 
         if (len(self._aliveTanks) > 0):
             for winner in self._aliveTanks:
