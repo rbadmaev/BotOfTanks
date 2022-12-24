@@ -76,6 +76,7 @@ class Game:
 
     def start(self):
         pygame.init()
+        pygame.display.set_caption('Bot of Tanks')
         pygame.font.init()
         screen = pygame.display.set_mode([self._size.x, self._size.y])
         for bot in self._bots:
