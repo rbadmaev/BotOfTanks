@@ -4,7 +4,7 @@ from Control import Control
 import os
 import threading
 import json
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, DEVNULL
 import sys
 
 class Bot:
@@ -18,12 +18,14 @@ class Bot:
         name = process.stdout.readline()
         tank.setName(name)
         print("start", name)
+        lastTime = Time.getTime()
         while tank.isAlive() and not self._game.isFinished():
-            if self._game.paused():
+            now = Time.getTime()
+            if now == lastTime:
                 Time.sleep(0.1)
                 continue
 
-            now = Time.getTime()
+            lastTime = now
             s = self._game.getJsonStruct(tank, now)
             stateMsg = json.dumps(self._game.getJsonStruct(tank, now))
             process.stdin.write(stateMsg + "\n")

@@ -82,7 +82,7 @@ class Game:
             bot.start()
 
         now = Time.getTime()
-        while len(self._aliveTanks) > 1:
+        while not self.isFinished():
             prevTime = now
             now = Time.getTime()
             self._processUserActions(now, prevTime)
@@ -145,6 +145,12 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    if not self._paused:
+                        self._paused = True
+                        Time.pause(self._paused)
+                    else:
+                        Time.tick()
+                elif event.key == pygame.K_p:
                     self._paused = not self._paused
                     Time.pause(self._paused)
                 elif event.key == pygame.K_d:
